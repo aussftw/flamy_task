@@ -1,19 +1,24 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {removeUser} from '../../../app/actions/users';
-import {TUser} from '../../../app/API';
+import {Navigation} from 'react-native-navigation';
+
+import {useAppDispatch, useAppSelector, useUsersListData} from '../../../app/hooks';
+import {ScreenNames} from '../../../app/interfaces/screenNames';
 import {fetchUsersThunk} from '../../../app/asyncActions/users';
 import {DEFAULT_USERS_LIMIT} from '../../../app/constants';
-import {useAppDispatch, useAppSelector, useUsersListData} from '../../../app/hooks';
-
+import {removeUser} from '../../../app/actions/users';
 import {COMMON_STYLES} from '../../../styles';
-
-import FindInput from './FindInput';
-import {Loader} from './Loader/Loader';
+import {Loader} from '../../../components';
+import {TUser} from '../../../app/API';
 import Pagination from './Pagination';
+import FindInput from './FindInput';
 import {UserItem} from './UserItem';
 
-function UsersList() {
+type UserListProps = {
+    componentId: string;
+};
+
+function UsersList({componentId}: UserListProps) {
     const [filter, setFilter] = React.useState('');
     const dispatch = useAppDispatch();
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,7 +26,7 @@ function UsersList() {
 
     const dataProps = useMemo(() => ({cursor, filter}), [cursor, filter]);
     const {users, usersLength} = useUsersListData(dataProps);
-    const status = useAppSelector(state => state.users.status);
+    const status = useAppSelector(state => state.users.usersStatus);
 
     useEffect(() => {
         dispatch(fetchUsersThunk());
@@ -40,13 +45,27 @@ function UsersList() {
         setFilter(text);
     }, []);
 
+    const handleNavigateToUserDetails = useCallback(
+        (userId: number) => {
+            Navigation.push<{userId: number}>(componentId, {
+                component: {
+                    name: ScreenNames.UserScreen,
+                    passProps: {
+                        userId,
+                    },
+                },
+            });
+        },
+        [componentId],
+    );
+
     const renderItem = useCallback(
         (item: TUser) => (
             <View key={item.id} style={styles.itemWrapper}>
-                <UserItem onRemove={handleRemoveUser} item={item} />
+                <UserItem onRemove={handleRemoveUser} item={item} navigateToUserDetails={handleNavigateToUserDetails} />
             </View>
         ),
-        [handleRemoveUser],
+        [handleRemoveUser, handleNavigateToUserDetails],
     );
 
     return (

@@ -61,3 +61,8 @@ export const COMMON_STYLES = StyleSheet.create({
     },
     scrollInnerContainer: {flexGrow: 1},
 });
+
+export const COMMON_COLORS = {
+    red: '#FF0000',
+    black_transparent: 'rgba(0,0,0,0.8)',
+};

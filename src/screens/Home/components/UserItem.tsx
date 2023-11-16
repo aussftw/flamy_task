@@ -1,19 +1,27 @@
 import React, {useCallback} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
+import {COMMON_STYLES, COMMON_COLORS} from '../../../styles';
+import {ImagePlaceholder} from '../../../components';
+import {HeartSvg} from '../../../assets/heart';
 import {TUser} from '../../../app/API';
-import {COMMON_STYLES} from '../../../styles';
-import {ImagePlaceholder} from './ImagePlaceholder/ImagePlaceholder';
 
 interface IProps {
     item: TUser;
     onRemove?: (id: number) => void;
+    navigateToUserDetails: (userId: number) => void;
 }
 
 export function UserItem(props: IProps) {
-    const {item, onRemove} = props;
-    const {avatar, name, id, age} = item;
+    const {item, onRemove, navigateToUserDetails} = props;
+    const {avatar, name, id, age, isLiked} = item;
 
     const handleRemove = useCallback(() => onRemove?.(item.id), [item, onRemove]);
+    const handleNavigateToUserDetails = useCallback(
+        () => navigateToUserDetails(item.id),
+        [item, navigateToUserDetails],
+    );
+
     const renderDescription = useCallback(
         () => (
             <View style={styles.text}>
@@ -36,22 +44,28 @@ export function UserItem(props: IProps) {
 
     const renderRemoveButton = useCallback(
         () => (
-            <TouchableOpacity onPress={handleRemove} style={styles.removeIconWrapper}>
+            <TouchableOpacity onPress={handleRemove} style={styles.iconWrapper}>
                 <Text style={styles.removeIcon}>x</Text>
             </TouchableOpacity>
         ),
         [handleRemove],
     );
 
+    const renderLike = useCallback(
+        () => <HeartSvg color={isLiked ? COMMON_COLORS.red : COMMON_COLORS.black_transparent} />,
+        [isLiked],
+    );
+
     const renderBody = useCallback(() => {
         return (
-            <View style={styles.body}>
+            <TouchableOpacity style={styles.body} onPress={handleNavigateToUserDetails}>
                 {renderImage()}
+                {renderLike()}
                 {renderDescription()}
                 {renderRemoveButton()}
-            </View>
+            </TouchableOpacity>
         );
-    }, [renderDescription, renderImage, renderRemoveButton]);
+    }, [renderDescription, renderImage, renderRemoveButton, handleNavigateToUserDetails, renderLike]);
 
     const renderContainer = useCallback(() => {
         return <View style={styles.container}>{renderBody()}</View>;
@@ -99,7 +113,7 @@ const styles = StyleSheet.create({
     removeIcon: {
         fontSize: 24,
     },
-    removeIconWrapper: {
+    iconWrapper: {
         alignItems: 'center',
         justifyContent: 'center',
     },

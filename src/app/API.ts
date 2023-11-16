@@ -5,6 +5,7 @@ export type TUser = {
     name: string;
     age: number;
     avatar: string;
+    isLiked?: boolean;
 };
 
 export type TUsers = TUser[];
