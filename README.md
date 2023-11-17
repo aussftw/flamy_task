@@ -40,18 +40,6 @@ npm start
 yarn start
 ```
 
-# Game Rules
-
-Welcome to the Guessing Game!
-
-The goal of the game is to predict whether the next card will be higher or lower than the current one. Here are the rules:
-
-- A new deck of cards is presented with one card facing up.
-- Your task is to guess whether the next card from the deck will be higher or lower.
-- For each correct guess, you'll earn a point.
-- The game continues until there are no more cards in the deck or you decide to reset the game.
-- Test your luck and see how high you can score!
-
 ## Step 2: Start your Application
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
