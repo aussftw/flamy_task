@@ -17,7 +17,7 @@ type TUsersState = {
 const initialState: TUsersState = {
     items: [],
     itemsLength: 0,
-    usersStatus: 'idle',
+    usersStatus: 'loading',
     userDetailsStatus: 'idle',
     userDetails: null,
 };

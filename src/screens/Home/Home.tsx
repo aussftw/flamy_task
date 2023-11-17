@@ -17,6 +17,6 @@ const Home = ({componentId}: HomeProps) => (
     </Provider>
 );
 
-const styles = StyleSheet.create({root: {flex: 1, backgroundColor: '#fff'}});
+const styles = StyleSheet.create({root: {flex: 1}});
 
 export default Home;

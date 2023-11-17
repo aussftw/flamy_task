@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     },
     safeAreaView: {
         flex: 1,
-        backgroundColor: '#fff',
     },
     container: {
         ...COMMON_STYLES.ph_1,
